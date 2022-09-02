@@ -1,0 +1,31 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager _navigationManager
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <div class="main">
+        <div class="content px-4">
+            @Body
+        </div>
+    </div>
+</div>
+
+@code{
+    private void HandleClick()
+    {
+        _navigationManager.NavigateTo("/", true);
+    }
+
+    [Inject]
+    IMessageService MessageService { get; set; }
+
+
+    Task CommingSoonMessage()
+    {
+        return MessageService.Info("Feature not build in yet, stay tuned!", "Ooooops");
+    }
+
+}

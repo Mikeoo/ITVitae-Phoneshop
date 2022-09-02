@@ -1,0 +1,31 @@
+﻿@page "/phone/{Id:int}"
+@using Phoneshop.Domain.Interfaces
+@inject IPhoneService _phoneService
+
+<div>
+    <Card>
+    <CardTitle Size="5">@Phone.FullName</CardTitle>
+    <Button class="PhoneDetailsCardButton" Color="Color.Primary" Type="ButtonType.Link" onclick="history.back()">Back</Button>
+
+    <CardBody class="PhoneDetailsBody">
+        <CardImage class="PhoneDetailsCardImage" Source="https://picsum.photos/150" Alt="Placeholder image"> </CardImage>
+        <p>
+            <h4>€@Phone.Price</h4>
+            @if (Phone.Stock <= 5)
+            {
+                <h4>Only @Phone.Stock left!</h4>
+            }
+            else
+            {
+                <h4>@Phone.Stock in stock.</h4>
+            }
+        </p>
+    </CardBody>
+    <CardBody>
+        <CardText>
+            <p class="card-text">€@Phone.Description</p>
+        </CardText>
+    </CardBody>
+</Card>
+</div>
+

@@ -1,0 +1,40 @@
+﻿@page "/register"
+@using Microsoft.AspNetCore.Components
+@using PhoneShop.api.Models
+@using ApiClientLibary
+@inject IApiClient _apiClient
+
+<EditForm Model="@_registerModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator/>
+    <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
+
+    <p>Username</p>
+    <input type="text" id="username" @bind="_registerModel.UserName" name="username" placeholder="JIJNAAM">
+    
+    <p>Email</p>
+    <input type="text" id="email" @bind="_registerModel.Email" name="email" placeholder="email">
+
+    <p>Password</p>
+    <input type="password" id="password" @bind="_registerModel.Password" name="password" placeholder="JIJPASS">
+    
+    <p>Confirm Password</p>
+    <input type="password" id="password" @bind="_registerModel.ConfirmPassword" name="confirmpassword" placeholder="JIJPASS">
+    <button type="submit">Submit</button>
+    <div>
+        @Apiresponse
+    </div>
+
+</EditForm>
+
+@code
+{
+    private readonly UserDetails _registerModel = new();
+    private string Apiresponse { get; set; }
+
+    public async Task HandleValidSubmit()
+    {
+        var response = await _apiClient.PostRequest<LoginApiResponse>("/RegisterJwt", _registerModel);
+        Apiresponse = response.Message;
+        StateHasChanged();
+    }
+}

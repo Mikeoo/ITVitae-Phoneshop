@@ -1,0 +1,81 @@
+﻿@page "/login"
+@using PhoneShop.api.Models
+@using ApiClientLibary
+@using System.Security.Principal
+@using Blazored.LocalStorage
+@using Microsoft.IdentityModel.Tokens
+@using PhoneShop.BlazorApp.Helpers
+@using System.Net.Http.Headers
+@using Microsoft.AspNetCore.Components.Server;
+@inject IAuthService _authService
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService _localStorage;
+@inject ServerAuthenticationStateProvider _authenticationStateProvider;
+
+@inject IApiClient _apiClient
+
+<EditForm Model="@_loginModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator/>
+    <Microsoft.AspNetCore.Components.Forms.ValidationSummary />
+
+    <p>Username/Email</p>
+    <input type="text" id="username" @bind="_loginModel.Username" name="username" placeholder="JIJNAAM">
+
+    <p>Password</p>
+    <input type="password" id="password" @bind="_loginModel.Password" name="password" placeholder="JIJPASS">
+    <button type="submit">Submit</button>
+    <div>
+        @token
+    </div>
+
+</EditForm>
+@code
+{
+    private LoginCredentials _loginModel = new();
+    private bool ShowErrors;
+    private string Error = "";
+    private string token;
+
+    private async Task HandleValidSubmit()
+    {
+        ShowErrors = false;
+
+        var result = await _apiClient.PostRequest<LoginApiResponse>("/LoginJwt", _loginModel);
+
+        token = result.Token;
+        if (result.Token is not null)
+        {
+            await _localStorage.SetItemAsync("authToken", result.Token);
+            ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(_loginModel.Username);
+
+            NavigationManager.NavigateTo($"/", true);
+        }
+        else
+        {
+            ShowErrors = true;
+        }
+        StateHasChanged();
+    }
+
+
+
+    //[Inject] 
+    //private ILocalStorageService _localStorage { get; set; }
+
+    //private LoginCredentials loginModel = new();
+    //private string apiresponse { get; set; }
+    //public async Task HandleValidSubmit()
+    //{
+    //    var response = await _apiClient.LoginClient.Login(loginModel);
+    //    apiresponse = response.Token;
+    //    if (!string.IsNullOrEmpty(response.Token))
+    //    {
+    //        await _localStorage.SetItemAsync("authToken", response.Token);
+
+    //    }
+
+    //    ////await _localStorage.SetItemAsync("authToken", response.Token);
+       
+    //    StateHasChanged();
+    //}
+}

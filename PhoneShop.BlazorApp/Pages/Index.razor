@@ -1,0 +1,31 @@
+﻿@page "/"
+@using ApiClientLibary
+@using PhoneShop.BlazorApp.Helpers
+@using Microsoft.AspNetCore.Components.Server
+@inherits PhoneInfo
+@inject IApiClient _apiClient
+@inject ServerAuthenticationStateProvider _apiAuthenticationStateProvider
+
+<AuthorizeView>
+    <Authorized>
+        <p>        Hello @context.User.Identities.First().Claims.FirstOrDefault(x => x.Type == "unique_name")?.Value ,your role is @context.User.Identities.First().Claims.First(x => x.Type == "role").Value
+
+        </p>        
+        <ul>
+            @if (phones != null)
+            {
+                foreach (var item in phones)
+                {
+                    <li><PhoneInfo Phone="item"></PhoneInfo> </li>
+                }
+            }
+        </ul>
+    </Authorized>
+    <NotAuthorized>
+        <a href="Register">Register</a>
+        <a href="Login">Log in</a>
+
+    </NotAuthorized>
+</AuthorizeView>
+
+

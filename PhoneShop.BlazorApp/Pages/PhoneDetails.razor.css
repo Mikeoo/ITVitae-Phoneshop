@@ -1,0 +1,25 @@
+﻿::deep .PhoneDetailsBody {
+    display: flex
+}
+
+::deep .PhoneDetailsCardButton {
+    line-height: 8px;
+    width: 100px;
+    font-size: 8pt;
+    font-family: tahoma;
+    margin-top: 1px;
+    margin-right: 2px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+::deep .PhoneDetailsCardPrice {
+    display: flex;
+    width: 10px;
+}
+
+::deep img.card-img-top.PhoneDetailsCardImage {
+    width: 30%;
+    padding: 10px 10px 10px 10px;
+}

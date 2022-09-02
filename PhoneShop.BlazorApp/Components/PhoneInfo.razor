@@ -1,0 +1,43 @@
+﻿@using Phoneshop.Domain.Interfaces
+@using ApiClientLibary
+@inject IPhoneService _phoneService
+@inject IApiClient _apiClient
+
+<Card Class="PhoneInfoCard" Margin="Margin.Is4.OnY">
+    <CardImage Class="PhoneInfoCardImage" Source="https://picsum.photos/150" Alt="Placeholder image">
+    </CardImage>
+    <CardBody Class="PhoneInfoCardBody">
+        <CardTitle Size="5">@Phone.FullName</CardTitle>
+        <CardText>
+            <p class="card-text">€@Phone.Price - Only @Phone.Stock in stock!.</p>
+        </CardText>
+        <Button class="PhoneInfoCardButton float-right" Color="Color.Primary" Type="ButtonType.Link" To="@($"/phone/{Phone.Id}")">Show More</Button>
+    </CardBody>
+</Card>
+
+
+@code {
+
+    [Parameter]
+    public Phone Phone { get; set; }
+
+    [Parameter]
+    public IEnumerable<Phone> phones { get; set; }
+
+    //protected override async Task<Task> OnAfterRenderAsync(bool firstRender)
+    //{
+    //    phones = await _apiClient.PhoneClient.GetAll();
+
+    //    StateHasChanged();
+    //    return base.OnAfterRenderAsync(firstRender);
+
+    //}
+
+    protected override async Task OnInitializedAsync()
+    {
+        phones = await _apiClient.GetRequest<List<Phone>>("/Phone/getall");
+        StateHasChanged();
+
+    }
+
+}

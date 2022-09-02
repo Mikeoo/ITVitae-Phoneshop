@@ -1,0 +1,41 @@
+﻿@page "/test"
+@using Phoneshop.Domain.Interfaces
+@using PhoneShop.BlazorApp.Data
+@inject IApiClient ApiClient
+
+<h3>Test</h3>
+@if (data == null)
+{
+    <div class="alert-warning">Data is null</div>
+}
+else
+{
+    <table>
+        <thead>
+        <tr>
+            <th>Brand</th>
+            <th>Type</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach(var p in data)
+        {
+            <tr>@p.FullName</tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<Phone> data = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await base.OnInitializedAsync();
+        data = await ApiClient.PhoneClient.GetAll();
+
+    }
+
+}
